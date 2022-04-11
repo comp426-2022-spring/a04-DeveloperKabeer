@@ -28,7 +28,7 @@ const fs = require("fs")
 const db = require("./database.js")
 const port = argv["port"] || 5555
 
-if(argv.debug == "true"){
+if(argv.debug == "true" || argv.debug == true){
     app.get("/app/log/access", (req,res) => {
         try{
             const stmt = db.prepare("SELECT * FROM accesslog").all()
@@ -42,7 +42,7 @@ if(argv.debug == "true"){
     })
 }
 
-if(argv.log != "false"){
+if(argv.log != "false" && argv.log != false){
     const accesslogstream = fs.createWriteStream("access.log", {flags: "a"})
     app.use(morgan('combined', {stream:accesslogstream }))
 }
