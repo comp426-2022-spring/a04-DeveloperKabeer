@@ -42,7 +42,7 @@ if(argv.debug == true){
     })
 }
 
-if(argv.log == true){
+if(argv.log != false){
     const accesslogstream = fs.createWriteStream("access.log", {flags: "a"})
     app.use(morgan('combined', {stream:accesslogstream }))
 }
