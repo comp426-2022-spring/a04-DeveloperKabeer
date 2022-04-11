@@ -28,11 +28,6 @@ const fs = require("fs")
 const db = require("./database.js")
 const port = argv["port"] || 5555
 
-if(argv.log == true){
-    const accesslogstream = fs.createWriteStream("access.log", {flags: "a"})
-    app.use(morgan('combined', {stream:accesslogstream }))
-}
-
 if(argv.debug == true){
     app.get("/app/log/access", (req,res) => {
         try{
@@ -46,6 +41,12 @@ if(argv.debug == true){
         throw new error("Error test successful.")
     })
 }
+
+if(argv.log == true){
+    const accesslogstream = fs.createWriteStream("access.log", {flags: "a"})
+    app.use(morgan('combined', {stream:accesslogstream }))
+}
+
 function coinFlip() {
     var min = 1
     var max = 2
