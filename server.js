@@ -28,7 +28,7 @@ const fs = require("fs")
 const db = require("./database.js")
 const port = argv["port"] || 5555
 
-if(argv.debug == true){
+if(argv.debug == "true"){
     app.get("/app/log/access", (req,res) => {
         try{
             const stmt = db.prepare("SELECT * FROM accesslog").all()
@@ -38,11 +38,11 @@ if(argv.debug == true){
         }
     })
     app.get("/app/error", (req, res) => {
-        throw new error("Error test successful.")
+        throw new Error("Error test successful.")
     })
 }
 
-if(argv.log != false){
+if(argv.log != "false"){
     const accesslogstream = fs.createWriteStream("access.log", {flags: "a"})
     app.use(morgan('combined', {stream:accesslogstream }))
 }
@@ -106,7 +106,7 @@ app.use((req, res, next) => {
         referer: req.headers['referer'],
         useragent: req.headers['user-agent']
     }
-    const stmt = db.prepare("INSERT INTO accesslog (remoteaddr, remoteuser, time, method, url, protocol, httpversion, status, referer, useragent (?,?,?,?,?,?,?,?,?,?,?)")
+    const stmt = db.prepare("INSERT INTO accesslog (remoteaddr, remoteuser, time, method, url, protocol, httpversion, status, referer, useragent) VALUES (?,?,?,?,?,?,?,?,?,?)")
     const info = stmt.run(logdata.remoteaddr, logdata.remoteuser, logdata.time, logdata.method, logdata.url, logdata.protocol, logdata.httpversion, logdata.status, logdata.referer, logdata.useragent)
     next()
 })
